@@ -1,26 +1,33 @@
+import Article from "@/components/Article/Article";
+import Comment from "@/components/Article/Comment";
+import Session from "@/components/Article/Session";
 import Categories from "@/components/Categories";
-import Featured from "@/components/Featured";
 import MostPopular from "@/components/MostPopular";
-import PopularCategory from "@/components/PopularCategory";
 import RecentPost from "@/components/RecentPost";
-import { useSearchParams } from "next/navigation";
+import { error } from "console";
 
-export default function Home({ searchParams }: any) {
-  const pageNumber = searchParams.page || 1;
+const getData = async (slug: any) => {
+  const res = await fetch(process.env.webUrl + `/api/posts/${slug}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw error("backend not working");
+  }
+  return res.json();
+};
+async function page({ params }: any) {
+  const { post } = await getData(params.slug);
 
   return (
-    <div className="mx-1 md:mx-auto max-w-[900px] m-auto dark:text-white text-gray-900">
-      <h2 className=" my-3 text-4xl text-center ">
-        <b>Hey, here! </b> Discover my stories and creative ideas.
-      </h2>
-      <Featured />
-      <PopularCategory />
+    <div className=" my-2">
+      {post && <Article posts={post} suppressHydrationWarning />}
       <div className="flex flex-wrap">
         <div className="w-full md:w-9/12">
+          <Session postId={post.slug} />
           <div className="my-4">
             <b>Recent Posts</b>
           </div>
-          <RecentPost page={pageNumber} />
+          <RecentPost page={1} />
         </div>
         <div className="flex flex-col sm:flex-row md:flex-col w-11/12 md:w-3/12">
           <div className="">
@@ -28,6 +35,8 @@ export default function Home({ searchParams }: any) {
               <b>Most Popular</b>
             </div>
 
+            <MostPopular />
+            <MostPopular />
             <MostPopular />
           </div>
           <div className="">
@@ -41,3 +50,5 @@ export default function Home({ searchParams }: any) {
     </div>
   );
 }
+
+export default page;

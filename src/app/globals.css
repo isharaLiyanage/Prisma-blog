@@ -25,3 +25,36 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.darkModeBtn {
+  transition-duration: 150ms;
+  transition-delay: 1s;
+}
+.sidebar {
+  animation: side 1s alternate ease-in;
+}
+
+@keyframes side {
+  0% {
+    transform: translateY(-50%);
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+.sidebar a {
+  animation: sides 2s alternate ease;
+}
+
+@keyframes sides {
+  0% {
+    opacity: 0.1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
